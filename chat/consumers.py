@@ -169,35 +169,35 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
 
 # #For video call
-# class SignalingConsumer(AsyncWebsocketConsumer):
-#     async def connect(self):
-#         self.room_name = "test_room"  # fixed room for demo
-#         self.room_group_name = f"signaling_{self.room_name}"
+class SignalingConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        self.room_name = "test_room"
+        self.room_group_name = f"signaling_{self.room_name}"
 
-#         await self.channel_layer.group_add(
-#             self.room_group_name,
-#             self.channel_name
-#         )
-#         await self.accept()
+        await self.channel_layer.group_add(
+            self.room_group_name,
+            self.channel_name
+        )
+        await self.accept()
 
-#     async def disconnect(self, close_code):
-#         await self.channel_layer.group_discard(
-#             self.room_group_name,
-#             self.channel_name
-#         )
+    async def disconnect(self, close_code):
+        await self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name
+        )
 
-#     async def receive(self, text_data):
-#         data = json.loads(text_data)
-#         # Broadcast to group except sender
-#         await self.channel_layer.group_send(
-#             self.room_group_name,
-#             {
-#                 "type": "signaling.message",
-#                 "message": data,
-#                 "sender_channel": self.channel_name,
-#             }
-#         )
+    async def receive(self, text_data):
+        data = json.loads(text_data)
+        # Broadcast to group except sender
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                "type": "signaling.message",
+                "message": data,
+                "sender_channel": self.channel_name,
+            }
+        )
 
-#     async def signaling_message(self, event):
-#         if self.channel_name != event["sender_channel"]:
-#             await self.send(text_data=json.dumps(event["message"]))
+    async def signaling_message(self, event):
+        if self.channel_name != event["sender_channel"]:
+            await self.send(text_data=json.dumps(event["message"]))

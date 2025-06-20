@@ -56,7 +56,7 @@ urlpatterns = [
     path('', include(router.urls)),
 
     #For video call
-    # path('video/', views.index, name='index'),
+    path('video/', index, name='index'),
      
     #Login apis and register apis
     path('register/', RegisterAPIView.as_view(), name='register'),
